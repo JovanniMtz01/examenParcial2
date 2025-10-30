@@ -1,0 +1,31 @@
+Tener instalado Git
+https://git-scm.com/downloads
+
+
+______________________
+clonar un repositorio
+
+
+1)colarse en la carpeta donde deseo bajar el repositorio
+
+2) abrir una terminal
+
+3) clonoar el repositorio
+	-- ir a la pagina del repositorio y copiar el enlace de clonación
+	-- en la terminal escribir "git clone " y  pegar en enlace en la terminal , ejemplo:
+		git clone https://github.com/JovanniMtz01/serialMonitorCSharp.git
+	--- enter
+
+________________________
+bajar cambios
+abrir una terminal en la carpeta del proyecto
+
+1) averiguar si tengo cambios usando el comando "git status" si no hay cambios seguir 
+
+	si esta limpio sale esto... 
+		On branch master
+		Your branch is up to date with 'origin/master'.
+
+		nothing to commit, working tree clean
+
+2) bajar cambios con "git pull"
