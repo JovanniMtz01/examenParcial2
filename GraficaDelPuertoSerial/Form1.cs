@@ -28,6 +28,19 @@ namespace p5_SerialVisual
 
             CheckForIllegalCrossThreadCalls = false;
 
+            //modificación
+
+            // Suscribir evento de click para recargar puertos
+            this.comboBox1.MouseClick += comboBox1_MouseClick;
+
+            // (Opcional) también al desplegar la lista:
+            this.comboBox1.DropDown += comboBox1_DropDown;
+
+            // Cargar inicial
+            RecargarPuertos();
+
+            //aqui termina
+
             string[] puertos = SerialPort.GetPortNames();
             comboBox1.Items.AddRange(puertos);
 
@@ -45,6 +58,61 @@ namespace p5_SerialVisual
         {
 
         }
+
+
+        //aqui empieza
+        private void RecargarPuertos()
+        {
+            // Guardar selección actual (si la hay)
+            string seleccionado = comboBox1.SelectedItem as string;
+
+            // Obtener y ordenar los puertos disponibles
+            string[] puertos = SerialPort.GetPortNames().OrderBy(p => p).ToArray();
+
+            comboBox1.BeginUpdate();
+            comboBox1.Items.Clear();
+            comboBox1.Items.AddRange(puertos);
+            comboBox1.EndUpdate();
+
+            // Reaplicar selección si sigue existiendo
+            if (!string.IsNullOrEmpty(seleccionado) && puertos.Contains(seleccionado))
+            {
+                comboBox1.SelectedItem = seleccionado;
+            }
+            else if (puertos.Length > 0)
+            {
+                // Seleccionar por defecto el primero si no hay selección válida
+                comboBox1.SelectedIndex = -1;
+            }
+            else
+            {
+                // Si no hay puertos, opcionalmente avisar
+                // (Evita mostrar el mensaje una y otra vez si no te conviene)
+                // MessageBox.Show("No se detectaron puertos disponibles.", "Aviso",
+                //                 MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                // Si estaba conectado, forzar cierre
+                if (serialPort1.IsOpen)
+                {
+                    serialPort1.Close();
+                    BtnConneted.Text = "Desconectado";
+                    BtnConneted.ForeColor = Color.Red;
+                    this.Text = "Visualizador Serial";
+                }
+            }
+        }
+
+        //parte 2
+
+        private void comboBox1_MouseClick(object sender, MouseEventArgs e)
+        {
+            RecargarPuertos();
+        }
+
+
+
+        //aqui termina
+
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
@@ -132,7 +200,14 @@ namespace p5_SerialVisual
 
         }
 
-       
+        //inicio
+        private void comboBox1_DropDown(object sender, EventArgs e)
+        {
+           
+            RecargarPuertos();
+        }
+        //fin
+
 
         private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
         {
